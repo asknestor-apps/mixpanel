@@ -18,6 +18,6 @@ module.exports = function(robot) {
   robot.respond(/mixpanel/i, function(msg){
     var today = new Date();
 
-    msg.reply('Glad to hear that you want to have some mixpanel stats');
+    msg.reply('Glad to hear that you want to have some updated mixpanel stats');
   });
 };
