@@ -1,0 +1,14 @@
+{
+  "name": "hubot-mixpanel",
+  "version": "0.0.1",
+  "description": "A hubot script to query Mixpanel API",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "mixpanel-data-export": "^1.8.2"
+  }
+}
