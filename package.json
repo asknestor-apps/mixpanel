@@ -1,6 +1,6 @@
 {
   "name": "hubot-mixpanel",
-  "version": "0.0.1",
+  "version": "0.0.2",
   "description": "A hubot script to query Mixpanel API",
   "main": "index.js",
   "scripts": {
