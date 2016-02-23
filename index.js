@@ -50,7 +50,7 @@ function getStats() {
 }
 
 module.exports = function(robot) {
-  robot.respond(/mixpanel/i, function(msg, done){
+  robot.respond(/mixpanel people/i, function(msg, done){
     msg.reply("Here are your latest users on Mixpanel").then(function() {
       getStats()
       .then(function(message){
