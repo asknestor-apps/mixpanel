@@ -3,20 +3,15 @@
   "version": "0.0.2",
   "description": "A hubot script to query Mixpanel API",
   "main": "index.js",
-  "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
-  },
   "author": "Joan-Diego Rodriguez <rodriguezjoan@gmail.com>",
   "license": "ISC",
   "dependencies": {
     "mixpanel-data-export": "^1.8.2",
-    "moment": "^2.10.6"
-  },
-  "peerDependencies": {
-    "hubot": "2.x"
+    "moment": "^2.10.6",
+    "nestorbot": "0.14.0"
   },
   "repository": {
     "type": "git",
-    "url": "https://github.com/mako-crm/hubot-mixpanel"
+    "url": "https://github.com/asknestor-apps/mixpanel"
   }
 }

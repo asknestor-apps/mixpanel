@@ -1,0 +1,9 @@
+{
+  "name": "Mixpanel",
+  "permalink": "mixpanel",
+  "description": "Get Mixpanel Stats from Nestor",
+  "environment_keys": {
+    "NESTOR_MIXPANEL_API_KEY": true,
+    "NESTOR_MIXPANEL_API_SECRET": true
+  }
+}
