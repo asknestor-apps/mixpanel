@@ -51,7 +51,7 @@ module.exports = function(robot) {
         locationString.push(user.$properties.$country_code);
       }
 
-      locationString.join(', ');
+      return locationString.join(', ');
     };
 
     return (
@@ -84,7 +84,7 @@ module.exports = function(robot) {
               title: identifier,
               fields: [{
                 'title': 'Email',
-                'value': user.$properties.$email,
+                'value': user.$properties.$email || user.$properties.email,
                 'short': true
               },
               {
@@ -99,7 +99,7 @@ module.exports = function(robot) {
               },
               {
                 'title': 'Last Seen',
-                'value': moment().to(user.$properties.$last_seen),
+                'value': moment(user.$properties.$last_seen).fromNow(),
                 'short': true
               },
               {
@@ -109,7 +109,12 @@ module.exports = function(robot) {
               },
               {
                 'title': 'Signed Up',
-                'value': moment().to(user.$properties.$created),
+                'value': moment(user.$properties.created).fromNow(),
+                'short': true
+              },
+              {
+                'title': 'Initial Referrer',
+                'value': user.$properties.$initial_referring_domain,
                 'short': true
               }
               ],
