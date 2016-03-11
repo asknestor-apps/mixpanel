@@ -122,6 +122,57 @@ module.exports = function(robot) {
     );
   };
 
+  var getEventPropertyStats = function(eventName, propertyName, timePeriod, msg) {
+    var event = eventName;
+    var properties = propertyName;
+    var type = 'general';
+    var parsedTime = parseTimePeriod(timePeriod);
+
+    return panel
+      .eventProperties({event: event, name: propertyName, type: type, unit: parsedTime.unit, interval: parsedTime.interval})
+      .then(function(data) {
+        var responses = [];
+        var allZero = true;
+        var responsesMap = {};
+
+        for(var propName in data.data.values) {
+          var series = data.data.values[propName];
+          for(var date in series) {
+            if(!responsesMap[date]) { responsesMap[date] = []; }
+            if(series[date] != 0) { allZero = false; }
+            responsesMap[date].push({"prop": propName, "value": series[date]});
+          }
+        }
+
+        if(allZero) {
+          return "Oops, couldn't find anything for this event " + eventName + " for this property: " + propertyName;
+        }
+
+        var times = Object.keys(responsesMap);
+        times.sort();
+
+        for(var i in times) {
+          var time = times[i];
+          var props = responsesMap[time].sort(function(a, b) {
+            if (a.value < b.value)
+              return 1;
+            if (a.value > b.value)
+              return -1;
+            return 0;
+          }).map(function(s) { return (s.prop + ": " + s.value); });
+
+          responses.push(msg.newRichResponse({
+            title: time,
+            fallback: "• " + time + ": " + props.join(", "),
+            text: "• " + props.join(', ')
+          }));
+        }
+
+        return responses;
+      })
+      .catch(function(err) { console.log(err); });
+  };
+
   var getEventStats = function(eventName, timePeriod, msg) {
     var event = [eventName];
     var type = 'general';
@@ -162,7 +213,20 @@ module.exports = function(robot) {
       .catch(function(err) { console.log(err); });
   };
 
-  robot.respond(/(?:mixpanel|mp) events ([\w\.:\- ]+?)\s*(?:over(?: the )(?:(?:last|past) )?(\d*\s*(?:minute|hour|day|week|month)s?))?$/i, function(msg, done) {
+  robot.respond(/(?:mixpanel|mp) events? ([\w\.:\- ]+?) by ([\w\.:\- ]+?)\s*(?:over(?: the )(?:(?:last|past) )?(\d*\s*(?:minute|hour|day|week|month)s?))?$/i, function(msg, done) {
+    var eventName = msg.match[1];
+    var propertyName = msg.match[2];
+    var timePeriod = msg.match[3] || 'day';
+
+    msg.reply("Here's stats for " + eventName + " for property: " + propertyName).then(function() {
+      getEventPropertyStats(eventName, propertyName, timePeriod, msg)
+      .then(function(message) {
+        msg.send(message, done);
+      });
+    });
+  });
+
+  robot.respond(/(?:mixpanel|mp) events? ([\w\.:\- ]+?)\s*(?:over(?: the )(?:(?:last|past) )?(\d*\s*(?:minute|hour|day|week|month)s?))?$/i, function(msg, done) {
     var eventName = msg.match[1];
     var timePeriod = msg.match[2] || 'day';
 
