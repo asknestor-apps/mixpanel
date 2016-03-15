@@ -218,7 +218,7 @@ module.exports = function(robot) {
       .catch(function(err) { console.log(err); });
   };
 
-  robot.respond(/(?:mixpanel|mp) events? ([\w\.:\- ]+?) by ([\w\.:\- ]+?)\s*(?:over(?: the )(?:(?:last|past) )?(\d*\s*(?:minute|hour|day|week|month)s?))?$/i, function(msg, done) {
+  robot.respond(/mixpanel events? ([\w\.:\- ]+?) by ([\w\.:\- ]+?)\s*(?:over(?: the )(?:(?:last|past) )?(\d*\s*(?:minute|hour|day|week|month)s?))?$/i, { suggestions: ["mixpanel events <event-name> by <property-name> [time period]"] }, function(msg, done) {
     var eventName = msg.match[1];
     var propertyName = msg.match[2];
     var timePeriod = msg.match[3] || 'day';
@@ -231,7 +231,7 @@ module.exports = function(robot) {
     });
   });
 
-  robot.respond(/(?:mixpanel|mp) events? ([\w\.:\- ]+?)\s*(?:over(?: the )(?:(?:last|past) )?(\d*\s*(?:minute|hour|day|week|month)s?))?$/i, function(msg, done) {
+  robot.respond(/mixpanel events? ([\w\.:\- ]+?)\s*(?:over(?: the )(?:(?:last|past) )?(\d*\s*(?:minute|hour|day|week|month)s?))?$/i, { suggestions: ["mixpanel events <event-name> [time period]"] }, function(msg, done) {
     var eventName = msg.match[1];
     var timePeriod = msg.match[2] || 'day';
 
@@ -243,7 +243,7 @@ module.exports = function(robot) {
     });
   });
 
-  robot.respond(/(?:mixpanel|mp) people/i, function(msg, done){
+  robot.respond(/mixpanel people/i, { suggestions: ["mixpanel people"] }, function(msg, done){
     msg.reply("Here are your latest users on Mixpanel").then(function() {
       getPeople(msg)
       .then(function(message){
