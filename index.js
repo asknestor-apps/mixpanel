@@ -218,7 +218,7 @@ module.exports = function(robot) {
       .catch(function(err) { console.log(err); });
   };
 
-  robot.respond(/mixpanel events? ([\w\.:\- ]+?) by ([\w\.:\- ]+?)\s*(?:over(?: the )(?:(?:last|past) )?(\d*\s*(?:minute|hour|day|week|month)s?))?$/i, { suggestions: ["mixpanel events <event-name> by <property-name> [time period]"] }, function(msg, done) {
+  robot.respond(/mixpanel events? ([\p{L}\p{N}_\.:\- ]+?) by ([\w\.:\- ]+?)\s*(?:over(?: the )(?:(?:last|past) )?(\d*\s*(?:minute|hour|day|week|month)s?))?$/i, { suggestions: ["mixpanel events <event-name> by <property-name> [time period]"] }, function(msg, done) {
     var eventName = msg.match[1];
     var propertyName = msg.match[2];
     var timePeriod = msg.match[3] || 'day';
@@ -231,7 +231,7 @@ module.exports = function(robot) {
     });
   });
 
-  robot.respond(/mixpanel events? ([\w\.:\- ]+?)\s*(?:over(?: the )(?:(?:last|past) )?(\d*\s*(?:minute|hour|day|week|month)s?))?$/i, { suggestions: ["mixpanel events <event-name> [time period]"] }, function(msg, done) {
+  robot.respond(/mixpanel events? ([\p{L}\p{N}_\.:\- ]+?)\s*(?:over(?: the )(?:(?:last|past) )?(\d*\s*(?:minute|hour|day|week|month)s?))?$/i, { suggestions: ["mixpanel events <event-name> [time period]"] }, function(msg, done) {
     var eventName = msg.match[1];
     var timePeriod = msg.match[2] || 'day';
 
