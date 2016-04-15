@@ -14,6 +14,7 @@
 var MixpanelExport = require('mixpanel-data-export');
 var moment = require('moment');
 var crypto = require('crypto');
+var mixpanelErrorHandler = require('./error');
 
 module.exports = function(robot) {
   var panel = new MixpanelExport({
@@ -59,6 +60,10 @@ module.exports = function(robot) {
         .engage()
         .then(function(data) {
           var responses = [];
+
+          if (error = data.error) {
+            return mixpanelErrorHandler(error, msg);
+          }
 
           data.results.sort(function(a, b) {
             if (a.$properties.$last_seen < b.$properties.$last_seen)
@@ -140,6 +145,10 @@ module.exports = function(robot) {
         var allZero = true;
         var responsesMap = {};
 
+        if (error = data.error) {
+          return mixpanelErrorHandler(error, msg);
+        }
+
         for(var propName in data.data.values) {
           var series = data.data.values[propName];
           for(var date in series) {
@@ -186,6 +195,10 @@ module.exports = function(robot) {
     return panel
       .events({event: event, type: type, unit: parsedTime.unit, interval: parsedTime.interval})
       .then(function(data) {
+        if (error = data.error) {
+          return mixpanelErrorHandler(error, msg);
+        }
+
         var values = data['data']['values'][eventName];
         var timePeriods = [];
         var allZero = true;
@@ -223,11 +236,9 @@ module.exports = function(robot) {
     var propertyName = msg.match[2];
     var timePeriod = msg.match[3] || 'day';
 
-    msg.reply("Here's stats for " + eventName + " for property: " + propertyName).then(function() {
-      getEventPropertyStats(eventName, propertyName, timePeriod, msg)
-      .then(function(message) {
-        msg.send(message, done);
-      });
+    getEventPropertyStats(eventName, propertyName, timePeriod, msg)
+    .then(function(message) {
+      msg.send(message, done);
     });
   });
 
@@ -235,20 +246,16 @@ module.exports = function(robot) {
     var eventName = msg.match[1];
     var timePeriod = msg.match[2] || 'day';
 
-    msg.reply("Here's stats for " + eventName).then(function() {
-      getEventStats(eventName, timePeriod, msg)
-      .then(function(message) {
-        msg.send(message, done);
-      });
+    getEventStats(eventName, timePeriod, msg)
+    .then(function(message) {
+      msg.send(message, done);
     });
   });
 
   robot.respond(/mixpanel people/i, { suggestions: ["mixpanel people"] }, function(msg, done){
-    msg.reply("Here are your latest users on Mixpanel").then(function() {
-      getPeople(msg)
-      .then(function(message){
-        msg.send(message, done);
-      });
+    getPeople(msg)
+    .then(function(message){
+      msg.send(message, done);
     });
   });
 };

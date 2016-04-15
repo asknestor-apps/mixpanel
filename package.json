@@ -8,7 +8,7 @@
   "dependencies": {
     "mixpanel-data-export": "^1.8.2",
     "moment": "^2.10.6",
-    "nestorbot": "0.35.0"
+    "nestorbot": "0.36.1"
   },
   "repository": {
     "type": "git",
