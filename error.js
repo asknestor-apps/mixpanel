@@ -1,6 +1,8 @@
 module.exports = function(error, msg) {
-  if (error == "Invalid API Key") {
+  if (error == "Invalid API key") {
     errorMessage = error + ": " + "Did you set `NESTOR_MIXPANEL_API_KEY` correctly?";
+  } else if (error == "Invalid API signature") {
+    errorMessage = error + ": " + "Did you set `NESTOR_MIXPANEL_API_SECRET` correctly?";
   } else {
     errorMessage = error;
   }
@@ -9,11 +11,6 @@ module.exports = function(error, msg) {
     title: "Oops, Mixpanel returned with an error",
     color: 'danger',
     fields: [
-      {
-        "title": "Response Code",
-        "value": error.statusCode,
-        "short": true
-      },
       {
         "title": "Error",
         "value": errorMessage,
